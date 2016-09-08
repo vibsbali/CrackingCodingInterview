@@ -7,7 +7,7 @@ namespace CrackingCodingInterview
         static void Main(string[] args)
         {
             var stringAlgo = new StringAlgorithms();
-            var result = stringAlgo.LongestCommonSubstring("abcdef", "abdefghijkabcdefg");
+            var result = stringAlgo.IsAnAnagram("abc", "cab");
             Console.WriteLine(result);
         }
     }
