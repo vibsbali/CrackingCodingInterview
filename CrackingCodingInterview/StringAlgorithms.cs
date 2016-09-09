@@ -159,7 +159,8 @@ namespace CrackingCodingInterview
         }
 
 
-        //Boyer-Moore-Horspool algorithm
+        /// <summary>
+        /// Boyer-Moore-Horspool algorithm
         /* Create a bad match table ie. for pattern TRUTH the table would be like so;       
         *                                   T R U
         *                                   1 3 2
@@ -169,7 +170,11 @@ namespace CrackingCodingInterview
         *  moved 3 character and if it was T then only 1
         *  If you want to match space then ensure to add space at the begining of the pattern
         */
-
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        /// When Solving start with how it would look like if the match was done in the first attempt and so on
         public bool BoyerMoreHorsepoolAlgorithm(string input, string pattern)
         {
             if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(pattern))
@@ -203,6 +208,9 @@ namespace CrackingCodingInterview
                             return true;
                         }
                     }
+                    //this line is important because once we start the matching process and for some reason the match is not complete we need to 
+                    //skip the complete pattern length because there is no way we will be able to match the pattern upto that character which is i 
+                    i = i + pattern.Length - 1;
                 }
                 else
                 {

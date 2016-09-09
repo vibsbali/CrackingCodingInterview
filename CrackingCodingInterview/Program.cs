@@ -7,7 +7,7 @@ namespace CrackingCodingInterview
         static void Main(string[] args)
         {
             var stringAlgo = new StringAlgorithms();
-            var result = stringAlgo.BoyerMoreHorsepoolAlgorithm("ramanand bag is a great place to live. ramanrao lives here", "ramrao");
+            var result = stringAlgo.BoyerMoreHorsepoolAlgorithm("arraragraaaararraaagrgggg", "arraaagr");
             Console.WriteLine(result);
         }
     }
