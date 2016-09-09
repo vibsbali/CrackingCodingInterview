@@ -160,8 +160,7 @@ namespace CrackingCodingInterview
 
 
         //Boyer-Moore-Horspool algorithm
-        /* Create a bad match table ie. for pattern TRUTH the table would be like so; starting from i = 0 and then setting value in bad match table to
-        *  the (length of pattern - i - 1) hence T = 5 - 0 -1, R = 5 - 1 - 1, U = 5 - 2 - 1 and so on
+        /* Create a bad match table ie. for pattern TRUTH the table would be like so;       
         *                                   T R U
         *                                   1 3 2
         *  Here is how the table is created - looking at pattern TRUTH 
@@ -227,12 +226,13 @@ namespace CrackingCodingInterview
         private static Dictionary<char, int> GenerateBadMatchTable(string pattern)
         {
             var badMatchTable = new Dictionary<char, int>();
-
-            for (int i = 0; i < pattern.Length - 1; i++)
+            var j = 1;  //We can optimise and remove j but I will leave it for readability
+            for (int i = pattern.Length - 2; i >= 0; i--)
             {
                 if (!badMatchTable.ContainsKey(pattern[i]))
                 {
-                    badMatchTable.Add(pattern[i], pattern.Length - i - 1);
+                    badMatchTable.Add(pattern[i], j);
+                    j++;
                 }
             }
 
