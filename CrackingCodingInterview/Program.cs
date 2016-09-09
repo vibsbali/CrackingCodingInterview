@@ -7,7 +7,7 @@ namespace CrackingCodingInterview
         static void Main(string[] args)
         {
             var stringAlgo = new StringAlgorithms();
-            var result = stringAlgo.IsAnAnagram("abc", "cab");
+            var result = stringAlgo.NaiiveSearchAlgorithm("abc", "bc");
             Console.WriteLine(result);
         }
     }
