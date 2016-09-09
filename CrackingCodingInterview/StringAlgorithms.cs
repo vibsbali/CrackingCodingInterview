@@ -160,7 +160,8 @@ namespace CrackingCodingInterview
 
 
         //Boyer-Moore-Horspool algorithm
-        /* Create a bad match table ie. for pattern TRUTH the table would be like so
+        /* Create a bad match table ie. for pattern TRUTH the table would be like so; starting from i = 0 and then setting value in bad match table to
+        *  the (length of pattern - i - 1) hence T = 5 - 0 -1, R = 5 - 1 - 1, U = 5 - 2 - 1 and so on
         *                                   T R U
         *                                   1 3 2
         *  Here is how the table is created - looking at pattern TRUTH 
@@ -170,89 +171,72 @@ namespace CrackingCodingInterview
         *  If you want to match space then ensure to add space at the begining of the pattern
         */
 
-        public int BoyerMoreHorsepoolAlgorithm(string input, string pattern)
+        public bool BoyerMoreHorsepoolAlgorithm(string input, string pattern)
         {
+            if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(pattern))
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (pattern.Length > input.Length)
+            {
+                return false;
+            }
+
+            //Create a bad match table
             Dictionary<char, int> badMatchTable = GenerateBadMatchTable(pattern);
 
-            //From here on we start the matching process
-            var lengthOfPattern = pattern.Length;
-            //We want to start matching from left to right so we skip number of items in input equal to pattern' length
-            for (int i = lengthOfPattern - 1; i < input.Length; i += lengthOfPattern)
-            {
-                //If we find the that right's character of pattern matches with inputString's character
-                if (input[i] == pattern[lengthOfPattern - 1])
-                {
-                    var result = SearchString(input, pattern, 0, i);
-                    if (result != -1)
-                    {
-                        return result;
-                    }
+            var i = pattern.Length - 1;
+            var j = pattern.Length - 1;
+            var matchCount = 0;
 
-                }
-                //Else if we find that right's character of pattern doesnt match with input string' character but the character is in bad match table 
-                //i.e. HELLO WORLD is our input string and pattern is OR
-                //             OR <- At this stage O And R doesn't match but O is in bad match table 
-                else if (input[i] != pattern[lengthOfPattern - 1] && badMatchTable.ContainsKey(input[i]))
+            while (i < input.Length)
+            {
+                if (input[i] == pattern[j])
                 {
-                    //get the value which determines our offset
-                    var value = badMatchTable[input[i]];
-                    var result = SearchString(input, pattern, value, i);
-                    if (result != -1)
+                    while (input[i] == pattern[j])
                     {
-                        return result;
+                        i--;
+                        j--;
+                        matchCount++;
+                        if (matchCount == pattern.Length)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    j = pattern.Length - 1;
+                    matchCount = 0;
+                    if (badMatchTable.ContainsKey(input[i]))
+                    {
+                        i = i + badMatchTable[input[i]];
+                    }
+                    else
+                    {
+                        i = i + j;
                     }
                 }
             }
 
-            return -1;
+            return false;
         }
 
         //Used in conjuction with BoyerMoreHorsepool algorithm
         private static Dictionary<char, int> GenerateBadMatchTable(string pattern)
         {
-            //Create a bad match table
             var badMatchTable = new Dictionary<char, int>();
-            var j = 1;  //We can optimise and remove j but I will leave it for readability
-            for (int i = pattern.Length - 2; i >= 0; i--)
+
+            for (int i = 0; i < pattern.Length - 1; i++)
             {
                 if (!badMatchTable.ContainsKey(pattern[i]))
                 {
-                    badMatchTable.Add(pattern[i], j);
-                    j++;
+                    badMatchTable.Add(pattern[i], pattern.Length - i - 1);
                 }
             }
 
             return badMatchTable;
         }
-
-        //Used in conjuction with BoyerMoreHorsepool algorithm
-        //Accepts input and pattern string along with offset and index value
-        //offset tell how much to the right pattern needs to be matched
-        private int SearchString(string input, string pattern, int offset, int index)
-        {
-            var indexToSearchFrom = pattern.Length - 1;
-            //check to ensure that offset + index doesn't cause out of bounds exception for input string
-            if (offset + index >= input.Length)
-            {
-                return -1;
-            }
-            for (int i = offset + index; i >= 0 && indexToSearchFrom >= 0; i--)
-            {
-                if (input[i] == pattern[indexToSearchFrom])
-                {
-                    if (indexToSearchFrom == 0)
-                    {
-                        return i;
-                    }
-                    --indexToSearchFrom;
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-            return -1;
-        }
-
     }
 }
