@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace CrackingCodingInterview
 {
@@ -157,6 +158,41 @@ namespace CrackingCodingInterview
 
             return false;
         }
+
+
+
+        public string Compress(string A)
+        {
+            if (string.IsNullOrWhiteSpace(A))
+            {
+                throw new InvalidOperationException("input string cannot be null or empty");
+            }
+
+            var myString = new StringBuilder();
+
+            var count = 1;
+            var lastCharacter = A[0];
+            for (int i = 1; i < A.Length; i++)
+            {
+                if (A[i] == lastCharacter)
+                {
+                    count++;
+                }
+                else
+                {
+                    myString.Append(lastCharacter);
+                    myString.Append(count);
+                    count = 1;
+                    lastCharacter = A[i];
+                }
+            }
+
+            myString.Append(lastCharacter);
+            myString.Append(count);
+
+            return myString.ToString();
+        }
+
 
 
         /// <summary>
